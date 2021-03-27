@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using Microsoft.WindowsAzure.Storage.Blob;
 using AzureFunctionsTutorial.Services;
+using System.IO;
 
 namespace AzureFunctionsTutorial.Functions
 {
@@ -26,9 +27,8 @@ namespace AzureFunctionsTutorial.Functions
         public async Task RunAsync([ServiceBusTrigger("new-images", Connection = "ServiceBusConnection")] string myQueueItem, ILogger log)
         {
             log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
-            JObject queueItem = JObject.Parse(myQueueItem);                 // Parse the object graph
+            JObject queueItem = JObject.Parse(myQueueItem);                 // Parse the object
             string imageName = queueItem["imageid"].ToString();
-            string unitId = queueItem["unitid"].ToString();
             string imageURL = _blobService.GetUnscreenedImage(imageName);
             log.LogInformation(imageURL);
 
