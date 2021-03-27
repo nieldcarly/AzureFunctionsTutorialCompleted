@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<style>
+    .upload-button {
+        width: 30%;
+        height: 50px;
+        text-align: center;
+        font-size: x-large;
+        display: inline-block;
+        margin: 4px 2px;
+        border-radius: 4px;
+        margin-left: 35%;
+        cursor: pointer;
+    }
+</style>
+
+<h1 style="text-align: center; padding-bottom: 50px;">Welcome to the Image Uploader</h1>
+
+<form name="file" method="post" enctype="multipart/form-data">
+    <label class="btn-primary upload-button" for="file">
+        <input type="file" accept="image/*" name="coverArtUrl" id="file" onchange="loadFile(event)" style="display: none;">
+        <img src="~/img/upload.svg" alt="">
+        <span style="vertical-align: top;">Upload Image</span>
+    </label>
+</form>
+
+
+<script>
+    function idGenerator() {
+        var x = Math.floor((Math.random() * 10000) + 1);
+        return x;
+    }
+
+    function loadFile(event) {
+        var pId = idGenerator();
+        const url = `/photo-upload/${pId}`;
+
+        const files = document.querySelector('[type=file]').files;
+        const formData = new FormData();
+
+        let file = files[0];
+
+        formData.append('file', file)
+
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+        }).then((response) => {
+            console.log(response)
+        });
+
+        //var image = document.getElementById('output');
+        //image.src = "https://mpgallery.blob.core.windows.net/local-images/" + imgName;
+    }
+</script>
